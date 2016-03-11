@@ -37,7 +37,7 @@ let salta_pred pred str comeco =
   loop comeco
 
 exception Caracter_invalido of char
-       
+
 let divide_em_palavras str =
   let n = String.length str in
   let rec loop i lst =
@@ -64,6 +64,16 @@ let divide_em_palavras str =
                  loop (j+1) (PalAtr::lst)
                else
                   raise (Caracter_invalido ':')
+      | '&' -> let j = i + 1 in
+               if j < n && String.get str j = '&' then
+                 loop ( j + 1 ) ( PalOp ELog::lst )
+               else
+                  raise ( Caracter_invalido '&' )
+      | '|' -> let j = i + 1 in
+               if j < n && String.get str j = '|' then
+                 loop ( j + 1 ) ( PalOp OuLog::lst )
+               else
+                  raise ( Caracter_invalido '|' )
       | c -> if is_digit c then
 	       let j =
 		 let j0 = salta_pred is_digit str (i+1) in
@@ -120,7 +130,7 @@ and fator palavras =
   | PalOp Pot :: resto' -> let (y,resto'') = fator resto' in
                            (Op(Pot,x,y),resto'')
   | _ -> (x,resto)
-                   
+
 and basica palavras =
   match palavras with
   | PalLit x :: resto -> (Cte x,resto)
@@ -133,14 +143,14 @@ and basica palavras =
   | PalOp Sub :: resto -> let (x,resto') = fator resto in
                           (Op(Sub,Cte 0.0,x),resto')
   | _ -> raise (Sintaxe "fator esperado")
-       
+
 
 let exp_of_string string =
   match expressao (divide_em_palavras string) with
   | (x, []) -> x
   | _ -> raise (Sintaxe "expressão inválida")
 
-(*               
+(*
 let teste1 =
   let entrada = read_line () in
   let palavras = divide_em_palavras entrada in
