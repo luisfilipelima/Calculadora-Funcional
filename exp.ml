@@ -4,6 +4,8 @@ type operacao =
   | Pro
   | Div
   | Pot
+  | ELog
+  | OuLog
 
 type exp =
   | Cte of float
