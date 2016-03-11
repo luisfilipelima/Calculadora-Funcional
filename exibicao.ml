@@ -10,7 +10,9 @@ let string_of_operacao f =
   | Pro -> "Pro"
   | Div -> "Div"
   | Pot -> "Pot"
-       
+  | ELog -> "E"
+  | OuLog -> "Ou"
+
 let rec tree_of_exp e =
   match e with
   | Cte x -> Node (string_of_float x, [])
