@@ -48,3 +48,4 @@ Temporary Items
 *.cmi
 *.cmx
 *.exe
+*.o
