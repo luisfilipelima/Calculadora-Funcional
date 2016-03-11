@@ -67,7 +67,9 @@ let divide_em_palavras str =
       | '=' -> loop ( i + 1 ) ( PalOp Igd::lst )
       | '<' -> let j = i + 1 in
                if j < n && String.get str j = '>' then
-                 looop ( j + 1 ) ( PalOp Dif::lst )
+                 loop ( j + 1 ) ( PalOp Dif::lst )
+               else
+                 raise ( Caracter_invalido '<' )
       | '&' -> let j = i + 1 in
                if j < n && String.get str j = '&' then
                  loop ( j + 1 ) ( PalOp ELog::lst )
