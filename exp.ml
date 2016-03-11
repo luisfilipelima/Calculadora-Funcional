@@ -4,6 +4,7 @@ type operacao =
   | Pro
   | Div
   | Pot
+  | Igd
   | ELog
   | OuLog
 
