@@ -5,6 +5,7 @@ type operacao =
   | Div
   | Pot
   | Igd
+  | Dif
   | ELog
   | OuLog
 
