@@ -1,16 +1,16 @@
 type operacao =
-  | Som
-  | Sub
-  | Pro
-  | Div
-  | Pot
-  | Igd
-  | Dif
-  | ELog
-  | OuLog
+    | Som
+    | Sub
+    | Pro
+    | Div
+    | Pot
+    | Igd
+    | Dif
+    | ELog
+    | OuLog
 
 type exp =
-  | Cte of float
-  | Var of string
-  | Op of operacao * exp * exp
-  | Atr of string * exp
+    | Cte of float
+    | Var of string
+    | Op of operacao * exp * exp
+    | Atr of string * exp
