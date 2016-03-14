@@ -15,6 +15,10 @@ let string_of_operacao f =
     | ELog -> "E"
     | OuLog -> "Ou"
     | NegaLog -> "Nega"
+    | Mir -> "Mir"
+    | Mnr -> "Mnr"
+    | MirIgd -> "MirIgd"
+    | MnrIgd -> "MnrIgd"
 
 let rec tree_of_exp e =
     match e with
