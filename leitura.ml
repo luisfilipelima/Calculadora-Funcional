@@ -47,23 +47,23 @@ let divide_em_palavras str =
             match String.get str i with
             | ' '
             | '\t'
-            | '\n' -> loop (i+1) lst
-            | '(' -> loop (i+1) (PalAPar::lst)
-            | ')' -> loop (i+1) (PalFPar::lst)
-            | '+' -> loop (i+1) (PalOp Som::lst)
-            | '-' -> loop (i+1) (PalOp Sub::lst)
+            | '\n' -> loop ( i + 1 ) lst
+            | '(' -> loop ( i + 1 ) ( PalAPar::lst )
+            | ')' -> loop ( i + 1) ( PalFPar::lst )
+            | '+' -> loop ( i + 1 ) ( PalOp Som::lst )
+            | '-' -> loop ( i + 1 ) ( PalOp Sub::lst )
             | '*' -> let j = i + 1 in
                    if j < n && String.get str j = '*' then
-                     loop (j+1) (PalOp Pot::lst)
+                     loop ( j + 1 ) ( PalOp Pot::lst )
                    else
-                     loop (i+1) (PalOp Pro::lst)
-            | '/' -> loop (i+1) (PalOp Div::lst)
-            | '^' -> loop (i+1) (PalOp Pot::lst)
+                     loop ( i + 1 ) ( PalOp Pro::lst )
+            | '/' -> loop ( i + 1 ) ( PalOp Div::lst )
+            | '^' -> loop ( i + 1 ) ( PalOp Pot::lst )
             | ':' -> let j = i + 1 in
                    if j < n && String.get str j = '=' then
-                     loop (j+1) (PalAtr::lst)
+                     loop ( j + 1 ) ( PalAtr::lst )
                    else
-                      raise (Caracter_invalido ':')
+                      raise ( Caracter_invalido ':' )
             | '=' -> loop ( i + 1 ) ( PalOp Igd::lst )
             | '<' -> let j = i + 1 in
                    if j < n && String.get str j = '>' then
@@ -158,7 +158,7 @@ and basica palavras =
 
 let exp_of_string string =
   match expressao ( divide_em_palavras string ) with
-  | ( x, [] ) -> x
+  | ( x, lst ) -> x
   | _ -> raise ( Sintaxe "expressão inválida" )
 
 (*
