@@ -28,6 +28,6 @@ let rec avalia memoria exp =
         in
         ( valor_res, memoria'' )
     | NegaOp ( op, x ) -> let ( valor_x, memoria' ) = avalia memoria x in
-        if valor_x = 0. then 1. else 0.
+        if valor_x = 0. then ( 1., memoria' ) else ( 0., memoria' )
     | Atr ( nome, x ) -> let ( valor_x, memoria' ) = avalia memoria x in
         ( valor_x, ( nome, valor_x ) :: memoria' )
