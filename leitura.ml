@@ -114,15 +114,28 @@ let rec expressao palavras =
     | _ -> expressao_logica palavras
 
 and expressao_logica palavras =
-    let ( x, resto ) = expressao_aritmetica palavras in
+    let ( x, resto ) = expressao_relacional palavras in
     let rec todos_os_termos x resto =
         match resto with
         | PalOp op :: resto' when op = ELog || op = OuLog ->
-            let ( y, resto'' ) = expressao_aritmetica resto' in
+            let ( y, resto'' ) = expressao_relacional resto' in
             todos_os_termos ( Op ( op, x, y ) ) resto''
         | _ -> ( x, resto )
     in
     todos_os_termos x resto
+
+and expressao_relacional palavras =
+	let ( x, resto ) = expressao_aritmetica palavras in
+	match resto with
+	| PalOp op :: resto' when op = Igd -> let (y, resto'') =
+        expressao_aritmetica resto'
+        in
+        ( Op ( op, x, y ), resto'' )
+	| PalOp op :: resto' when op = Dif -> let (y, resto'') =
+        expressao_aritmetica resto'
+        in
+		( Op ( op, x, y ), resto'' )
+	|_ -> ( x, resto )
 
 and expressao_aritmetica palavras =
     let ( x, resto ) = termo palavras in

@@ -18,9 +18,9 @@ let rec avalia memoria exp =
             | Div      -> valor_x /. valor_y
             | Pot      -> valor_x ** valor_y
             | Igd      -> if valor_x = valor_y then 1. else 0.
-            | Dif      -> if valor_x != valor_y then 1. else 0.
-            | ELog     -> if valor_x != 0. && valor_y != 0. then 1. else 0.
-            | OuLog    -> if valor_x != 0. || valor_y != 0. then 1. else 0.
+            | Dif      -> if valor_x = valor_y then 0. else 1.
+            | ELog     -> if valor_x = 0. || valor_y = 0. then 0. else 1.
+            | OuLog    -> if valor_x = 0. && valor_y = 0. then 0. else 1.
             in
             ( valor_res, memoria'' )
     | Atr ( nome, x ) -> let ( valor_x, memoria' ) = avalia memoria x in
