@@ -18,4 +18,5 @@ type exp =
     | Cte of float
     | Var of string
     | Op of operacao * exp * exp
+    | NegaOp of operacao * exp
     | Atr of string * exp
