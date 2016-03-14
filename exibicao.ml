@@ -10,8 +10,6 @@ let string_of_operacao f =
     | Pro -> "Pro"
     | Div -> "Div"
     | Pot -> "Pot"
-    | Igd -> "="
-    | Dif -> "<>"
     | ELog -> "E"
     | OuLog -> "Ou"
 
