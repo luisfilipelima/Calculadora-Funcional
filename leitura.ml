@@ -65,9 +65,20 @@ let divide_em_palavras str =
                    else
                       raise ( Caracter_invalido ':' )
             | '=' -> loop ( i + 1 ) ( PalOp Igd::lst )
+            | '>' -> let j = i + 1 in
+                   if j < n && String.get str j = '=' then
+                        loop ( j + 1 ) ( PalOp MirIgd::lst )
+                   else if j < n then
+                        loop ( j ) ( PalOp Mir::lst )
+                   else
+                        raise ( Caracter_invalido '>' )
             | '<' -> let j = i + 1 in
                    if j < n && String.get str j = '>' then
-                     loop ( j + 1 ) ( PalOp Dif::lst )
+                        loop ( j + 1 ) ( PalOp Dif::lst )
+                   else if j < n && String.get str j = '=' then
+                        loop ( j + 1 ) ( PalOp MnrIgd::lst )
+                   else if j < n then
+                        loop ( j ) ( PalOp Mnr::lst )
                    else
                      raise ( Caracter_invalido '<' )
             | '&' -> let j = i + 1 in
@@ -139,14 +150,11 @@ and expressao_logica palavras =
 and expressao_relacional palavras =
 	let ( x, resto ) = expressao_aritmetica palavras in
 	match resto with
-	| PalOp op :: resto' when op = Igd -> let (y, resto'') =
+	| PalOp op :: resto' when op = Igd  || op = Dif || op = Mir || op = MirIgd ||
+        op = MnrIgd || op = Mnr -> let ( y, resto'' ) =
         expressao_aritmetica resto'
         in
         ( Op ( op, x, y ), resto'' )
-	| PalOp op :: resto' when op = Dif -> let (y, resto'') =
-        expressao_aritmetica resto'
-        in
-		( Op ( op, x, y ), resto'' )
 	|_ -> ( x, resto )
 
 and expressao_aritmetica palavras =

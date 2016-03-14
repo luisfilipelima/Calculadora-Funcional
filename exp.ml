@@ -9,6 +9,10 @@ type operacao =
     | ELog
     | OuLog
     | NegaLog
+    | Mir
+    | MirIgd
+    | Mnr
+    | MnrIgd
 
 type exp =
     | Cte of float
