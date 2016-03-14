@@ -131,7 +131,7 @@ and expressao_logica_nega palavras =
         match resto with
         | PalOp op :: resto' when op = NegaLog ->
             let ( y, resto'' ) = expressao_logica resto' in
-            todos_os_termos ( Op ( op, x, y ) ) resto''
+            todos_os_termos ( NegaOp ( op, x ) ) resto''
         | _ -> ( x, resto )
     in
     todos_os_termos x resto
@@ -197,6 +197,8 @@ and basica palavras =
                         )
     | PalOp Sub :: resto -> let ( x, resto' ) = fator resto in
                           ( Op ( Sub, Cte 0.0, x ), resto' )
+    | PalOp NegaLog :: resto -> let ( x, resto' ) = fator resto in
+                          ( NegaOp ( NegaLog, x ), resto' )
     | _ -> raise ( Sintaxe "fator esperado" )
 
 
