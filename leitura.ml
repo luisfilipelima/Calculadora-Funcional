@@ -111,16 +111,25 @@ let rec expressao palavras =
     match palavras with
     | PalId nome :: PalAtr :: resto -> let (e,resto') = expressao_aritmetica resto in
                                      (Atr (nome,e), resto')
-    | _ -> expressao_aritmetica palavras
+    | _ -> expressao_logica palavras
+
+and expressao_logica palavras =
+    let ( x, resto ) = expressao_aritmetica palavras in
+    let rec todos_os_termos x resto =
+        match resto with
+        | PalOp op :: resto' when op = LogE || op = LogOu ->
+            let ( y, resto'' ) = expressao_aritmetica resto' in
+            todos_os_termos ( Op ( op, x, y ) ) resto''
+        | _ -> ( x, resto )
 
 and expressao_aritmetica palavras =
-    let (x,resto) = termo palavras in
+    let ( x, resto ) = termo palavras in
     let rec todos_os_termos x resto =
-    match resto with
-    | PalOp op :: resto' when op = Som || op = Sub ->
-         let (y,resto'') = termo resto' in
-         todos_os_termos (Op (op,x,y)) resto''
-    | _ -> (x,resto)
+        match resto with
+        | PalOp op :: resto' when op = Som || op = Sub ->
+             let ( y, resto'' ) = termo resto' in
+             todos_os_termos ( Op ( op, x, y ) ) resto''
+        | _ -> ( x, resto )
     in
     todos_os_termos x resto
 
