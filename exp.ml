@@ -8,6 +8,7 @@ type operacao =
     | Dif
     | ELog
     | OuLog
+    | NegaLog
 
 type exp =
     | Cte of float

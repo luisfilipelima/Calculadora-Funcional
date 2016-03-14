@@ -14,6 +14,7 @@ let string_of_operacao f =
     | Dif -> "Dif"
     | ELog -> "E"
     | OuLog -> "Ou"
+    | NegaLog -> "Nega"
 
 let rec tree_of_exp e =
     match e with

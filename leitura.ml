@@ -80,6 +80,7 @@ let divide_em_palavras str =
                      loop ( j + 1 ) ( PalOp OuLog::lst )
                    else
                       raise ( Caracter_invalido '|' )
+            | '~' -> loop ( i + 1 ) ( PalOp NegaLog::lst )
             | c ->
                 if is_digit c then
                     let j =
@@ -111,7 +112,18 @@ let rec expressao palavras =
     match palavras with
     | PalId nome :: PalAtr :: resto -> let ( e, resto' ) = expressao_aritmetica resto in
                                      ( Atr ( nome, e ), resto' )
-    | _ -> expressao_logica palavras
+    | _ -> expressao_logica_nega palavras
+
+and expressao_logica_nega palavras =
+    let ( x, resto ) = expressao_logica palavras in
+    let rec todos_os_termos x resto =
+        match resto with
+        | PalOp op :: resto' when op = NegaLog ->
+            let ( y, resto'' ) = expressao_logica resto' in
+            todos_os_termos ( Op ( op, x, y ) ) resto''
+        | _ -> ( x, resto )
+    in
+    todos_os_termos x resto
 
 and expressao_logica palavras =
     let ( x, resto ) = expressao_relacional palavras in
