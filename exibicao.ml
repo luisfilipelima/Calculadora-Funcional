@@ -27,6 +27,7 @@ let rec tree_of_exp e =
     | Op (f, e1, e2) -> Node (string_of_operacao f,
 			    [ tree_of_exp e1; tree_of_exp e2 ]
 			   )
+    | NegaOp ( f, e1 ) -> Node ( string_of_operacao f, [ tree_of_exp e1 ] )
     | Atr (v, e) -> Node ("Atrib", [Node (v, []); tree_of_exp e])
 
 let string_of_exp e =
