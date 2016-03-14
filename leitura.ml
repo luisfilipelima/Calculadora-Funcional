@@ -74,7 +74,7 @@ let divide_em_palavras str =
                    if j < n && String.get str j = '&' then
                      loop ( j + 1 ) ( PalOp ELog::lst )
                    else
-                      loop ( j ) ( PalOp ELog::lst )
+                      raise ( Caracter_invalido '&' )
             | '|' -> let j = i + 1 in
                    if j < n && String.get str j = '|' then
                      loop ( j + 1 ) ( PalOp OuLog::lst )
@@ -109,18 +109,20 @@ exception Sintaxe of string
 
 let rec expressao palavras =
     match palavras with
-    | PalId nome :: PalAtr :: resto -> let (e,resto') = expressao_aritmetica resto in
-                                     (Atr (nome,e), resto')
+    | PalId nome :: PalAtr :: resto -> let ( e, resto' ) = expressao_aritmetica resto in
+                                     ( Atr ( nome, e ), resto' )
     | _ -> expressao_logica palavras
 
 and expressao_logica palavras =
     let ( x, resto ) = expressao_aritmetica palavras in
     let rec todos_os_termos x resto =
         match resto with
-        | PalOp op :: resto' when op = LogE || op = LogOu ->
+        | PalOp op :: resto' when op = ELog || op = OuLog ->
             let ( y, resto'' ) = expressao_aritmetica resto' in
             todos_os_termos ( Op ( op, x, y ) ) resto''
         | _ -> ( x, resto )
+    in
+    todos_os_termos x resto
 
 and expressao_aritmetica palavras =
     let ( x, resto ) = termo palavras in
