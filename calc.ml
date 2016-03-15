@@ -14,9 +14,9 @@ let rec le_avalia_exibe memoria =
       try
         let e = Leitura.exp_of_string entrada in
         print_endline "Estrutura da expressão:";
-        print_endline (Exibicao.string_of_exp e);
+        print_endline ( Exibicao.string_of_exp e );
         print_newline ();
-        let (v,m) = Avaliacao.avalia memoria e in
+        let ( v, m ) = Avaliacao.avalia memoria e in
         print_endline "Valor da expressão:";
         print_float v;
         print_newline ();
@@ -54,13 +54,13 @@ Acrescentar expressões condicionais:
    operadores lógicos:
       && (e lógico)
       || (ou lógico)
-   
+
    negação lógica:
       ~ (operador unário)
 
    expressão condicional:
       if <expressao> then <expressao> else <expressao>
-      
+
       Exemplos:
         if 2 > 0 then 5+1 else 5-1  =>  6.0
 
