@@ -230,9 +230,11 @@ and basica palavras =
 
 
 let exp_of_string string =
-  match expressao ( divide_em_palavras string ) with
-  | ( x, lst ) -> x
-  | _ -> raise ( Sintaxe "expressão inválida" )
+begin
+    match expressao ( divide_em_palavras string ) with
+    | ( x, lst ) -> x
+    | _ -> raise ( Sintaxe "expressão inválida" )    
+end
 
 (*
 let teste1 =
