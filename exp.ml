@@ -13,6 +13,9 @@ type operacao =
     | MirIgd
     | Mnr
     | MnrIgd
+    | If
+    | Else
+    | Then
 
 type exp =
     | Cte of float
@@ -20,3 +23,4 @@ type exp =
     | Op of operacao * exp * exp
     | NegaOp of operacao * exp
     | Atr of string * exp
+    | ExCon of operacao * exp * operacao * exp * operacao * exp
