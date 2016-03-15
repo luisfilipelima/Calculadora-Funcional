@@ -1,0 +1,27 @@
+        | PalIf  op :: resto' when op = If ->
+            let ( y, resto'' ) = expressao_logica_nega resto' in
+            todos_os_termos ( ExCon If, y ) resto''
+        | PalThen  op :: resto' when op = Then ->
+            let ( y, resto'' ) = expressao_logica_nega resto in
+            todos_os_termos ( ExCon Then, y ) resto''
+        | PalElse   -> let ( y, resto' ) = expressao_logica_nega resto in
+            todos_os_termos ( ExCon Else, x ) resto'
+
+
+
+and expressao_condicional palavras =
+    let ( x, resto ) = expressao_logica_nega palavras in
+    let rec todos_os_termos x resto =
+        match resto with
+        | PalIf opIf :: Op e1 :: PalThen opThen :: Op e2 :: PalElse opElse :: Op e3 ->
+            let ( rE1, restoE1 ) = expre
+        | _ -> ( x, resto )
+
+and expressao_condicional palavras =
+    match palavra with
+    | PalIf opIf :: Op e1 :: PalThen opThen :: Op e2 :: PalElse opElse :: Op e3 ->
+        ( ExCon( opIf, e1, opThen, e2, opElse e3 ),  )
+    | _ -> ( x, resto )
+
+
+ocamlopt exp.ml tree.ml leitura.ml avaliacao.ml exibicao.ml calc.ml -o calculadora.exe
