@@ -10,15 +10,21 @@ type palavra =
     | PalLit of float
     | PalId of string
     | PalAtr
+    | PalIf
+    | PalThen
+    | PalElse
 
 let string_of_palavra p =
     match p with
-    | PalAPar -> "PalAPar"
-    | PalFPar -> "PalFPar"
-    | PalOp f -> "PalOp(" ^ string_of_operacao f ^ ")"
-    | PalLit x -> "PalLit(" ^ string_of_float x ^ ")"
-    | PalId id -> "PalId(" ^ id ^ ")"
-    | PalAtr -> "PalAtr"
+    | PalAPar   -> "PalAPar"
+    | PalFPar   -> "PalFPar"
+    | PalOp f   -> "PalOp(" ^ string_of_operacao f ^ ")"
+    | PalLit x  -> "PalLit(" ^ string_of_float x ^ ")"
+    | PalId id  -> "PalId(" ^ id ^ ")"
+    | PalAtr    -> "PalAtr"
+    | PalIf     -> "PalIf"
+    | PalThen   -> "PalThen"
+    | PalElse   -> "PalElse"
 
 let is_digit c =
     c >= '0' && c <= '9'
@@ -95,23 +101,29 @@ let divide_em_palavras str =
             | c ->
                 if is_digit c then
                     let j =
-            	      let j0 = salta_pred is_digit str (i+1) in
-                        if j0 < n && String.get str j0 = '.' then
-            	              salta_pred is_digit str (j0 + 1)
-            	        else
-            	              j0
-                in
+            	      let j0 = salta_pred is_digit str ( i + 1 ) in
+                      if j0 < n && String.get str j0 = '.' then
+                        salta_pred is_digit str ( j0 + 1 )
+                      else
+            	        j0
+                      in
 
-                let texto = String.sub str i (j - i) in
-                let numero = float_of_string texto in
-                loop j ( PalLit numero::lst )
+                      let texto = String.sub str i ( j - i ) in
+                      let numero = float_of_string texto in
+                      loop j ( PalLit numero::lst )
 
                 else if is_letter c then
-                   let j = salta_pred (fun x -> is_letter x ||
-                       is_digit x || x = '_') str i in
-                   let texto = String.sub str i (j - i) in
-                   loop j ( PalId texto::lst )
-
+                   let j = salta_pred ( fun x -> is_letter x ||
+                       is_digit x || x = '_' ) str i in
+                   let texto = String.sub str i ( j - i ) in
+                   if texto = "if" then
+                        loop ( PalIf::lst )
+                   else if texto = "then" then
+                        loop ( PalThen::lst )
+                   else if texto = "else" then
+                        loop ( PalElse::lst )
+                   else
+                        loop j ( PalId texto::lst )
                 else
                    raise ( Caracter_invalido c )
     in
@@ -123,7 +135,19 @@ let rec expressao palavras =
     match palavras with
     | PalId nome :: PalAtr :: resto -> let ( e, resto' ) = expressao_aritmetica resto in
                                      ( Atr ( nome, e ), resto' )
-    | _ -> expressao_logica_nega palavras
+    | _ -> expressao_condicional palavras
+
+and expressao_condicional palavras =
+    let ( x, resto ) = expressao_logica_nega palavras in
+    let rec todos_os_termos x resto =
+        match resto with
+        | PalIf     -> let ( y, resto' ) = expressao_logica_nega resto in
+            todos_os_termos ( ExCon If, x ) resto'
+        | PalThen   -> let ( y, resto' ) = expressao_logica_nega resto in
+            todos_os_termos ( ExCon Then, x ) resto'
+        | PalElse   -> let ( y, resto' ) = expressao_logica_nega resto in
+            todos_os_termos ( ExCon Else, x ) resto'
+        | _ -> ( x, resto )
 
 and expressao_logica_nega palavras =
     let ( x, resto ) = expressao_logica palavras in
@@ -201,11 +225,16 @@ and basica palavras =
                           ( NegaOp ( NegaLog, x ), resto' )
     | _ -> raise ( Sintaxe "fator esperado" )
 
-
+let divide_em_palavras_con string =
+    let string' = String.sub 1 ( String.length string ) in  (* Remove If *)
 let exp_of_string string =
-  match expressao ( divide_em_palavras string ) with
-  | ( x, lst ) -> x
-  | _ -> raise ( Sintaxe "expressão inválida" )
+  let string' = String.sub 0 1 in
+  if string' = "if" then
+    let string'' =
+  else
+    match expressao ( divide_em_palavras string ) with
+    | ( x, lst ) -> x
+    | _ -> raise ( Sintaxe "expressão inválida" )
 
 (*
 let teste1 =
