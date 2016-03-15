@@ -29,5 +29,12 @@ let rec avalia memoria exp =
         ( valor_res, memoria'' )
     | NegaOp ( op, x ) -> let ( valor_x, memoria' ) = avalia memoria x in
         if valor_x = 0. then ( 1., memoria' ) else ( 0., memoria' )
+    | ExCon ( x, y, z ) -> let ( valor_e1, memoria' ) = avalia memoria x in
+        if valor_e1 != 0. then
+            let ( valor_e2, memoria' ) = avalia memoria y in
+            ( valor_e2, memoria' )
+        else
+            let ( valor_e3, memoria' ) = avalia memoria z in
+            ( valor_e3, memoria' )
     | Atr ( nome, x ) -> let ( valor_x, memoria' ) = avalia memoria x in
         ( valor_x, ( nome, valor_x ) :: memoria' )
