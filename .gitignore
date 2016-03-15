@@ -50,3 +50,5 @@ Temporary Items
 *.exe
 *.o
 avaliacao.o
+*.o
+avaliacao.o
