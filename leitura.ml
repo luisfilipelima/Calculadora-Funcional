@@ -10,6 +10,9 @@ type palavra =
     | PalLit of float
     | PalId of string
     | PalAtr
+    | PalIf
+    | PalThen
+    | PalElse
 
 let string_of_palavra p =
     match p with
@@ -19,6 +22,9 @@ let string_of_palavra p =
     | PalLit x -> "PalLit(" ^ string_of_float x ^ ")"
     | PalId id -> "PalId(" ^ id ^ ")"
     | PalAtr -> "PalAtr"
+    | PalIf -> "PalIf"
+    | PalThen -> "PalThen"
+    | PalElse -> "PalElse"
 
 let is_digit c =
     c >= '0' && c <= '9'
@@ -95,23 +101,29 @@ let divide_em_palavras str =
             | c ->
                 if is_digit c then
                     let j =
-            	      let j0 = salta_pred is_digit str (i+1) in
-                        if j0 < n && String.get str j0 = '.' then
-            	              salta_pred is_digit str (j0 + 1)
-            	        else
-            	              j0
-                in
+            	      let j0 = salta_pred is_digit str ( i + 1 ) in
+                      if j0 < n && String.get str j0 = '.' then
+                        salta_pred is_digit str ( j0 + 1 )
+                      else
+            	        j0
+                      in
 
-                let texto = String.sub str i (j - i) in
-                let numero = float_of_string texto in
-                loop j ( PalLit numero::lst )
+                      let texto = String.sub str i ( j - i ) in
+                      let numero = float_of_string texto in
+                      loop j ( PalLit numero::lst )
 
                 else if is_letter c then
-                   let j = salta_pred (fun x -> is_letter x ||
-                       is_digit x || x = '_') str i in
-                   let texto = String.sub str i (j - i) in
-                   loop j ( PalId texto::lst )
-
+                   let j = salta_pred ( fun x -> is_letter x ||
+                       is_digit x || x = '_' ) str i in
+                   let texto = String.sub str i ( j ) in
+                   if texto = "if" then
+                        loop j ( PalIf::lst )
+                   else if texto = "then" then
+                        loop j ( PalThen::lst )
+                   else if texto = "else" then
+                        loop j ( PalElse::lst )
+                   else
+                        loop j ( PalId texto::lst )
                 else
                    raise ( Caracter_invalido c )
     in
@@ -123,8 +135,9 @@ let rec expressao palavras =
     match palavras with
     | PalId nome :: PalAtr :: resto -> let ( e, resto' ) = expressao_aritmetica resto in
                                      ( Atr ( nome, e ), resto' )
-    | _ -> expressao_logica_nega palavras
+    | _ -> expressao_logica palavras
 
+(*
 and expressao_logica_nega palavras =
     let ( x, resto ) = expressao_logica palavras in
     let rec todos_os_termos x resto =
@@ -135,6 +148,7 @@ and expressao_logica_nega palavras =
         | _ -> ( x, resto )
     in
     todos_os_termos x resto
+*)
 
 and expressao_logica palavras =
     let ( x, resto ) = expressao_relacional palavras in
@@ -199,6 +213,19 @@ and basica palavras =
                           ( Op ( Sub, Cte 0.0, x ), resto' )
     | PalOp NegaLog :: resto -> let ( x, resto' ) = fator resto in
                           ( NegaOp ( NegaLog, x ), resto' )
+    | PalIf :: resto -> let ( x, resto1 ) = expressao resto in
+        begin
+        match resto1 with
+        | PalThen :: resto2 -> let ( y, resto3 ) = expressao resto2 in
+            begin
+            match resto3 with
+            | PalElse :: resto3 -> let ( z, resto4 ) = expressao resto3 in
+                ( ExCon ( x, y, z), resto4 )
+            | _ -> raise ( Sintaxe "else nao encontrado" )
+            end
+        | _ -> raise ( Sintaxe "then nao encontrado" )
+        end
+
     | _ -> raise ( Sintaxe "fator esperado" )
 
 

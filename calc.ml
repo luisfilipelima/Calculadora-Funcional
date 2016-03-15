@@ -54,13 +54,13 @@ Acrescentar expressões condicionais:
    operadores lógicos:
       && (e lógico)
       || (ou lógico)
-   
+
    negação lógica:
       ~ (operador unário)
 
    expressão condicional:
       if <expressao> then <expressao> else <expressao>
-      
+
       Exemplos:
         if 2 > 0 then 5+1 else 5-1  =>  6.0
 
