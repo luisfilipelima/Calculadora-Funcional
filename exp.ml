@@ -19,4 +19,5 @@ type exp =
     | Var of string
     | Op of operacao * exp * exp
     | NegaOp of operacao * exp
+    | ExCon of exp * exp * exp
     | Atr of string * exp
